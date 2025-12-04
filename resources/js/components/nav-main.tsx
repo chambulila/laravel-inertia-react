@@ -1,37 +1,145 @@
 import {
+    Sidebar,
+    SidebarContent,
     SidebarGroup,
     SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
+    SidebarRail,
 } from '@/components/ui/sidebar';
 import { resolveUrl } from '@/lib/utils';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
+import { Home, Minus, Plus, User, Users } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
-export function NavMain({ items = [] }: { items: NavItem[] }) {
-    const page = usePage();
+export function NavMain({ items = [] }: { items: NavItem[], }) {
+        const { url } = usePage();
+    // const { can } = usePermission();
+
+    const data = {
+        navMain: [
+            {
+                title: "User Management",
+                url: "#",
+                icon: User,
+                isVisible: true,
+                items: [
+                    {
+                        title: "Users",
+                        url: "/dashboard/users",
+                        isVisible: true,
+                        isActive: url.startsWith('/dashboard/users'),
+                    },
+                    {
+                        title: "Roles",
+                        url: "/dashboard/roles",
+                        isVisible: true,
+                        isActive: url.startsWith('/dashboard/roles'),
+                    },
+                ],
+            },
+            {
+                title: "People",
+                url: "#",
+                icon: Users,
+                isVisible: true,
+                items: [
+                    {
+                        title: "Customers",
+                        url: "/dashboard/customers",
+                        isVisible: true,
+                        isActive: url.startsWith('/dashboard/customers'),
+                    },
+                    {
+                        title: "Suppliers",
+                        url: "/dashboard/suppliers",
+                        isVisible: true,
+                        isActive: url.startsWith('/dashboard/suppliers'),
+                    },
+                ],
+            },
+        ],
+    }
+
     return (
-        <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
-            <SidebarMenu>
-                {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton
-                            asChild
-                            isActive={page.url.startsWith(
-                                resolveUrl(item.href),
-                            )}
-                            tooltip={{ children: item.title }}
-                        >
-                            <Link href={item.href} prefetch>
-                                {item.icon && <item.icon />}
-                                <span>{item.title}</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
-        </SidebarGroup>
+        (<Sidebar >
+            <SidebarContent className="bg-primary-main dark:bg-primary-800 text-white dark:text-gray-100">
+                <SidebarGroup>
+                    <SidebarMenu>
+                        {/* Dashboard as first item */}
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild isActive={url === '/dashboard'}>
+                                <Link href="/dashboard" className="flex items-center gap-2 text-white dark:text-gray-100">
+                                    <Home />
+                                    <span>Dashboard</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        {data.navMain.filter(item => item.isVisible)?.map((item, index) => {
+                            const Icon = item.icon;
+
+                            return (
+                                <Collapsible key={item.title} defaultOpen={item.items?.filter(it => it?.isActive)?.length > 0} className="group/collapsible">
+                                    <SidebarMenuItem>
+                                        <CollapsibleTrigger asChild>
+                                            <SidebarMenuButton className="text-black">
+                                                {Icon && <Icon />}
+                                                {item.title}
+                                                <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
+                                                <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
+                                            </SidebarMenuButton>
+                                        </CollapsibleTrigger>
+                                        {item.items?.length ? (
+                                            <CollapsibleContent >
+                                                <SidebarMenuSub>
+                                                    {item.items?.filter(it => it.isVisible)?.map((subItem) => (
+                                                        <SidebarMenuSubItem key={subItem.title}>
+                                                            <SidebarMenuSubButton asChild isActive={subItem.isActive}>
+                                                                <Link className="text-black dark:text-gray-100" href={subItem.url}>{subItem.title}</Link>
+                                                            </SidebarMenuSubButton>
+                                                        </SidebarMenuSubItem>
+                                                    ))}
+                                                </SidebarMenuSub>
+                                            </CollapsibleContent>
+                                        ) : null}
+                                    </SidebarMenuItem>
+                                </Collapsible>
+                            );
+                        })}
+
+                    </SidebarMenu>
+                </SidebarGroup>
+            </SidebarContent>
+            <SidebarRail />
+        </Sidebar>)
     );
+    // const page = usePage();
+    // return (
+    //     <SidebarGroup className="px-2 py-0">
+    //         <SidebarGroupLabel>Platform</SidebarGroupLabel>
+    //         <SidebarMenu>
+    //             {items.map((item) => (
+    //                 <SidebarMenuItem key={item.title}>
+    //                     <SidebarMenuButton
+    //                         asChild
+    //                         isActive={page.url.startsWith(
+    //                             resolveUrl(item.href),
+    //                         )}
+    //                         tooltip={{ children: item.title }}
+    //                     >
+    //                         <Link href={item.href} prefetch>
+    //                             {item.icon && <item.icon />}
+    //                             <span>{item.title}</span>
+    //                         </Link>
+    //                     </SidebarMenuButton>
+    //                 </SidebarMenuItem>
+    //             ))}
+    //         </SidebarMenu>
+    //     </SidebarGroup>
+    // );
 }
