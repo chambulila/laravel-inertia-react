@@ -18,7 +18,7 @@ import { Home, Minus, Plus, User, Users } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
 export function NavMain({ items = [] }: { items: NavItem[], }) {
-        const { url } = usePage();
+    const { url } = usePage();
     // const { can } = usePermission();
 
     const data = {
@@ -67,56 +67,51 @@ export function NavMain({ items = [] }: { items: NavItem[], }) {
     }
 
     return (
-        (<Sidebar >
-            <SidebarContent className="bg-primary-main dark:bg-primary-800 text-white dark:text-gray-100">
-                <SidebarGroup>
-                    <SidebarMenu>
-                        {/* Dashboard as first item */}
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild isActive={url === '/dashboard'}>
-                                <Link href="/dashboard" className="flex items-center gap-2 text-white dark:text-gray-100">
-                                    <Home />
-                                    <span>Dashboard</span>
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        {data.navMain.filter(item => item.isVisible)?.map((item, index) => {
-                            const Icon = item.icon;
+        <SidebarGroup>
+            <SidebarMenu>
+                {/* Dashboard as first item */}
+                <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={url === '/dashboard'}>
+                        <Link href="/dashboard" className="flex items-center gap-2">
+                            <Home />
+                            <span>Dashboard</span>
+                        </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+                {data.navMain.filter(item => item.isVisible)?.map((item, index) => {
+                    const Icon = item.icon;
 
-                            return (
-                                <Collapsible key={item.title} defaultOpen={item.items?.filter(it => it?.isActive)?.length > 0} className="group/collapsible">
-                                    <SidebarMenuItem>
-                                        <CollapsibleTrigger asChild>
-                                            <SidebarMenuButton className="text-black">
-                                                {Icon && <Icon />}
-                                                {item.title}
-                                                <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
-                                                <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
-                                            </SidebarMenuButton>
-                                        </CollapsibleTrigger>
-                                        {item.items?.length ? (
-                                            <CollapsibleContent >
-                                                <SidebarMenuSub>
-                                                    {item.items?.filter(it => it.isVisible)?.map((subItem) => (
-                                                        <SidebarMenuSubItem key={subItem.title}>
-                                                            <SidebarMenuSubButton asChild isActive={subItem.isActive}>
-                                                                <Link className="text-black dark:text-gray-100" href={subItem.url}>{subItem.title}</Link>
-                                                            </SidebarMenuSubButton>
-                                                        </SidebarMenuSubItem>
-                                                    ))}
-                                                </SidebarMenuSub>
-                                            </CollapsibleContent>
-                                        ) : null}
-                                    </SidebarMenuItem>
-                                </Collapsible>
-                            );
-                        })}
+                    return (
+                        <Collapsible key={item.title} defaultOpen={item.items?.filter(it => it?.isActive)?.length > 0} className="group/collapsible">
+                            <SidebarMenuItem>
+                                <CollapsibleTrigger asChild>
+                                    <SidebarMenuButton className="">
+                                        {Icon && <Icon />}
+                                        {item.title}
+                                        <Plus className="ml-auto group-data-[state=open]/collapsible:hidden" />
+                                        <Minus className="ml-auto group-data-[state=closed]/collapsible:hidden" />
+                                    </SidebarMenuButton>
+                                </CollapsibleTrigger>
+                                {item.items?.length ? (
+                                    <CollapsibleContent >
+                                        <SidebarMenuSub>
+                                            {item.items?.filter(it => it.isVisible)?.map((subItem) => (
+                                                <SidebarMenuSubItem key={subItem.title}>
+                                                    <SidebarMenuSubButton asChild isActive={subItem.isActive}>
+                                                        <Link className="" href={subItem.url}>{subItem.title}</Link>
+                                                    </SidebarMenuSubButton>
+                                                </SidebarMenuSubItem>
+                                            ))}
+                                        </SidebarMenuSub>
+                                    </CollapsibleContent>
+                                ) : null}
+                            </SidebarMenuItem>
+                        </Collapsible>
+                    );
+                })}
 
-                    </SidebarMenu>
-                </SidebarGroup>
-            </SidebarContent>
-            <SidebarRail />
-        </Sidebar>)
+            </SidebarMenu>
+        </SidebarGroup>
     );
     // const page = usePage();
     // return (
