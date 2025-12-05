@@ -1,23 +1,17 @@
 import {
-    Sidebar,
-    SidebarContent,
     SidebarGroup,
-    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
-    SidebarRail,
 } from '@/components/ui/sidebar';
-import { resolveUrl } from '@/lib/utils';
-import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { Home, Minus, Plus, User, Users } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 
-export function NavMain({ items = [] }: { items: NavItem[], }) {
+export function NavMain() {
     const { url } = usePage();
     // const { can } = usePermission();
 
@@ -78,7 +72,7 @@ export function NavMain({ items = [] }: { items: NavItem[], }) {
                         </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
-                {data.navMain.filter(item => item.isVisible)?.map((item, index) => {
+                {data.navMain.filter(item => item.isVisible)?.map((item) => {
                     const Icon = item.icon;
 
                     return (
